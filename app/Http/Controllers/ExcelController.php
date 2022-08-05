@@ -8,18 +8,25 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class ExcelController extends Controller
 {
-    public $incre = 2;
-    public $price = 0;
-    public function storeQueue()
-    {
-        $Excel = '123123';
-        $jobTest = new ExcelJob($Excel);
-        dispatch($jobTest);
-        $this->incre++;
-        return   1;
-        // $this->getData();
-    }
+    public function storeQueue(){
 
+    }
+    public function storeQueue2($prices)
+    {
+        dd(123123);
+        // $url = $prices;
+        // dd($url);
+        $filePath = public_path() . '/link.xlsx';
+        $reader = ReaderEntityFactory::createReaderFromFile($filePath);
+        $reader->open($filePath);
+        foreach ($reader->getSheetIterator() as $sheet) {
+            foreach ($sheet->getRowIterator() as $i => $row) {
+                $cells = $row->getCells();
+                dd($cells);
+            }
+        }
+        // dispatch(new ExcelJob());
+    }
 
     /**
      * Get data from XML handle
@@ -29,7 +36,6 @@ class ExcelController extends Controller
 
     public function getData()
     {
-        echo $this->incre;
         $store_SP_One = 'Sp-One';
         $store_XV = 'Xuân Vinh';
         $store_PV = 'Phong Vũ';
@@ -49,7 +55,6 @@ class ExcelController extends Controller
         $reader->open($filePath);
         $data = [];
         $store = [];
-
         foreach ($reader->getSheetIterator() as $sheet) {
             foreach ($sheet->getRowIterator() as $i => $row) {
                 // dd($row);
@@ -74,73 +79,50 @@ class ExcelController extends Controller
                     $product['Name'] = $item[1];
                     $links = [];
                     $prices = [];
-                    // $price = 0;
 
-                    // foreach ($store as $storeKey => $storeValue) {
-                    // dd(array_search($storeValue, $store));
-                    // $url = $item[$storeValue];
-                    // dd(count($store));
-                    // if ($this->incre > count($store)) return;
-                    $url = $item[$this->incre];
-                    $nameStore = array_search($this->incre, $store);
+                    foreach ($store as $storeKey => $storeValue) {
+                        $url = $item[$storeValue];
+                        $links[$storeKey] = $url;
+                        $price = 0;
+                        if (!empty($url)) {
 
-                    $links[$nameStore] = $url;
+                            $file_headers = @get_headers($url);
+                            if ($file_headers && !str_contains($file_headers[0], 'HTTP/1.1 404') && !str_contains($file_headers[0], 'HTTP/1.1 301')) {
+                                $html = Document::file_get_html($url, false, null, 0);
 
-                    if (!empty($url)) {
-
-                        $file_headers = @get_headers($url);
-                        if ($file_headers && !str_contains($file_headers[0], 'HTTP/1.1 404') && !str_contains($file_headers[0], 'HTTP/1.1 301')) {
-                            $html = Document::file_get_html($url, false, null, 0);
-                            switch (strtoupper($nameStore)) {
-                                case strtoupper($store_SP_One);
-                                    $prices[$nameStore] = $this->getPriceSPOne($html);
-                                    break;
-                                case strtoupper($store_XV);
-                                    $prices[$nameStore] = $this->getPriceXV($html);
-                                    break;
-                                case strtoupper($store_PV);
-                                    $prices[$nameStore] = $this->getPricePV($html);
-                                    break;
-                                case strtoupper($store_PHILONG);
-                                    $prices[$nameStore] = $this->getPricePL($html);
-                                    break;
-                                case strtoupper($store_AP);
-                                    $prices[$nameStore] = $this->getPriceAP($html);
-                                    break;
-                                case strtoupper($store_HN);
-                                    $prices[$nameStore] = $this->getPriceHN($html);
-                                    break;
-                                case strtoupper($store_GEARVN);
-                                    $prices[$nameStore] = $this->getPriceGearVN($html);
-                                    break;
-                                case strtoupper($store_PA);
-                                    $prices[$nameStore] = $this->getPricePA($html);
-                                    break;
+                                switch (strtoupper($storeKey)) {
+                                    case strtoupper($store_SP_One);
+                                        $price = $this->getPriceSPOne($html);
+                                        break;
+                                    case strtoupper($store_XV);
+                                        $price = $this->getPriceXV($html);
+                                        break;
+                                    case strtoupper($store_PV);
+                                        $price = $this->getPricePV($html);
+                                        break;
+                                    case strtoupper($store_PHILONG);
+                                        $price = $this->getPricePL($html);
+                                        break;
+                                    case strtoupper($store_AP);
+                                        $price = $this->getPriceAP($html);
+                                        break;
+                                    case strtoupper($store_HN);
+                                        $price = $this->getPriceHN($html);
+                                        break;
+                                    case strtoupper($store_GEARVN);
+                                        $price = $this->getPriceGearVN($html);
+                                        break;
+                                    case strtoupper($store_PA);
+                                        $price = $this->getPricePA($html);
+                                        break;
+                                    default:
+                                }
                             }
-                            // $prices[$nameStore] = $this->price;
-                            // echo $nameStore;
-                            $product['links'] = $links;
-                            $product['prices'] = $prices;
-                            $data[] = $product;
-                            echo "<pre>";
-                            // print_r($data);
-
-                            // return $data;
-                        } else {
-                            echo "<pre>";
-                            echo $url;
-                            print_r($file_headers[0]);
                         }
-                    } else {
-                        echo "<pre>";
-                        echo $url;
+
+                        $prices[$storeKey] = $price;
+                        $i++;
                     }
-                    // $this->incre++;
-
-
-                    // $prices[$storeKey] = $price;
-                    // $i++;
-                    // // }
 
                     $product['links'] = $links;
                     $product['prices'] = $prices;
@@ -154,9 +136,8 @@ class ExcelController extends Controller
         echo "<br>";
 
         echo "<pre>";
-        // return ($data);
+        print_r($data);
         echo "<br>";
-        // if ($bia == 1) return;
         // exit;
     }
 
@@ -177,7 +158,6 @@ class ExcelController extends Controller
                 $price = $price->innertext;
             }
         }
-        // echo $price;
 
         return $price;
     }
