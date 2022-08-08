@@ -11,22 +11,6 @@ class ExcelController extends Controller
     public function storeQueue(){
 
     }
-    public function storeQueue2($prices)
-    {
-        dd(123123);
-        // $url = $prices;
-        // dd($url);
-        $filePath = public_path() . '/link.xlsx';
-        $reader = ReaderEntityFactory::createReaderFromFile($filePath);
-        $reader->open($filePath);
-        foreach ($reader->getSheetIterator() as $sheet) {
-            foreach ($sheet->getRowIterator() as $i => $row) {
-                $cells = $row->getCells();
-                dd($cells);
-            }
-        }
-        // dispatch(new ExcelJob());
-    }
 
     /**
      * Get data from XML handle
