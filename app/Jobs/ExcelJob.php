@@ -18,20 +18,19 @@ class ExcelJob implements ShouldQueue
 
     public $lineInExcel = 0;
     public $lineTest = 0;
-    // public ExcelController $instance;
+    public ExcelController $instance;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($instance)
     {
-        // $this->instance = $instance;
+        $this->instance = $instance;
         $this->queue = 'excel-test';
         $this->delay = now()->addSeconds(0.5);
     }
-
 
     /**
      * Execute the job.
@@ -41,7 +40,7 @@ class ExcelJob implements ShouldQueue
     public function handle()
     {
         try {
-            $res = ExcelService::getData();
+            $res = $this->instance->getData();
             // Log::info($this->instance->line);
             Log::info($res);
         } catch (Exception $e) {
