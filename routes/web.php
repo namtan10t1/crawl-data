@@ -1,8 +1,9 @@
 <?php
 
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ExcelTempClass;
 use App\Http\Controllers\ExcelController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,4 +21,6 @@ Route::get('/', function () {
 
 Route::get('/excel-test', [ExcelController::class, 'getData']);
 
-Route::get('/store-queue', [ExcelController::class, 'storeQueue']);
+// Route::get('/store-queue', [ExcelController::class, 'storeQueue']);
+Route::get('/store-queue', [ExcelTempClass::class, 'totalAdd']);
+
