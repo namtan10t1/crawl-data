@@ -15,7 +15,6 @@ class ExcelTempClass extends Controller
     public $price = 0;
     public $name;
 
-
     // public function __construct($line) {
     //     $this->line = $line;
     // }

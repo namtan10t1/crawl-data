@@ -11,26 +11,14 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
 
 class ExcelController extends Controller
 {
-    use PushNotificationTrait;
+    // use PushNotificationTrait;
 
     public $incre = 2;
     public $line = 0;
 
-    public function storeQueue()
+    public function __construct($line)
     {
-        $instance = new ExcelController($this->line);
-        $jobTest = new ExcelJob($instance);
-        dispatch($jobTest);
-        // $this->incre++;
-        $this->line += 3;
-    }
-
-    public function totalAdd()
-    {
-        for ($i = 0; $i < 1000; $i++) {
-            $this->storeQueue();
-        }
-        return  $this->line;
+        $this->line = $line;
     }
 
     public function setLine($targetLine)
