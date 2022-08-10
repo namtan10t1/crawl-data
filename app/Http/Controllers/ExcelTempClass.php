@@ -30,7 +30,7 @@ class ExcelTempClass extends Controller
 
     public function totalAdd()
     {
-        for ($i = 0; $i < 1000; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             $this->storeQueue();
         }
         return  $this->line;

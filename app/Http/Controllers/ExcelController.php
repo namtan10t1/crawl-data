@@ -14,7 +14,7 @@ class ExcelController extends Controller
     // use PushNotificationTrait;
 
     public $incre = 2;
-    public $line = 0;
+    // public $line = 0;
 
     public function __construct($line)
     {
@@ -127,12 +127,12 @@ class ExcelController extends Controller
             }
         }
 
-        // $reader->close();
-        // var_dump('Time end: ' . date("Y-m-d H:i:s"));
-        // echo "<br>";
-        // echo "<pre>";
-        // print_r($data);
-        // print_r($line);
+        $reader->close();
+        var_dump('Time end: ' . date("Y-m-d H:i:s"));
+        echo "<br>";
+        echo "<pre>";
+        print_r($data);
+        print_r($line);
 
         // return $data;
         // Log::info($data);
