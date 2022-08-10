@@ -6,10 +6,10 @@ use App\Services\ExcelService;
 
 trait PushNotificationTrait
 {
-    public function pushMessage()
+    public function addcslashes()
     {
-        $pushNotificationService = new ExcelService();
+        $instance = new ExcelService();
 
-        return $pushNotificationService;
+        return $instance;
     }
 }

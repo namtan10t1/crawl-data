@@ -11,8 +11,9 @@ use Box\Spout\Reader\Common\Creator\ReaderEntityFactory;
  */
 class ExcelService
 {
-    public function __construct()
+    public function __construct($line)
     {
+        $this->line = $line;
     }
 
     public function getData()

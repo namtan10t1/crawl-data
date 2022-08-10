@@ -16,7 +16,6 @@ class ExcelJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $lineInExcel = 0;
     public $lineTest = 0;
     public ExcelController $instance;
 

@@ -13,7 +13,6 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\CrawlTime::class,
     ];
     /**
      * Define the application's command schedule.
@@ -23,7 +22,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crawl:hours')->cron("*/2 * * * *");
+        $schedule->command('message:daily')->everyMinute()->appendOutputTo('scheduler.log');
     }
 
     /**
