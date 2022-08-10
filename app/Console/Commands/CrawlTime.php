@@ -2,11 +2,16 @@
 
 namespace App\Console\Commands;
 
+use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\ExcelController;
 
 class CrawlTime extends Command
 {
+    public ExcelController $instance;
+    // $instance = new ExcelController();
+
     /**
      * The name and signature of the console command.
      *
@@ -29,6 +34,7 @@ class CrawlTime extends Command
     public function __construct()
     {
         parent::__construct();
+        $this->instance = new ExcelController('');
     }
 
     /**
@@ -38,6 +44,12 @@ class CrawlTime extends Command
      */
     public function handle()
     {
+        try {
+            $res = $this->instance->getData();
+            // Log::info($this->instance->line);
+            Log::info($res);
+        } catch (Exception $e) {
+        }
         Log::info("successfully");
     }
 }

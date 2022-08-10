@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('crawl:hours')->cron("*/2 * * * *");
+        $schedule->command('crawl:hours')->everyMinute()->appendOutputTo('scheduler.log');
     }
 
     /**
