@@ -26,7 +26,7 @@ class ExcelController extends Controller
         $this->line = $targetLine;
     }
 
-    public function getData()
+    public function getData($line)
     {
         $store_SP_One = 'Sp-One';
         $store_XV = 'Xuân Vinh';
@@ -35,6 +35,7 @@ class ExcelController extends Controller
         $store_AP = 'An Phát';
         $store_HN = 'HÀ NỘI';
         $store_GEARVN = 'Gearvn';
+        $store_THNS = 'Tin Học Ngôi Sao';
         $store_PA = 'Phúc Anh';
 
         var_dump(('Time start: ' . date("Y-m-d H:i:s")));
@@ -48,7 +49,7 @@ class ExcelController extends Controller
         $data = [];
         $store = [];
         $lineIn = 0;
-        $line = 0;
+        // $line = 0;
 
         foreach ($reader->getSheetIterator() as $sheet) {
             foreach ($sheet->getRowIterator() as $i => $row) {
@@ -108,6 +109,9 @@ class ExcelController extends Controller
                                         case strtoupper($store_GEARVN);
                                             $price = $this->getPriceGearVN($html);
                                             break;
+                                        case strtoupper($store_THNS);
+                                            $price = $this->getPriceTHNS($url);
+                                            break;
                                         case strtoupper($store_PA);
                                             $price = $this->getPricePA($html);
                                             break;
@@ -155,7 +159,7 @@ class ExcelController extends Controller
             }
         }
 
-        return $price;
+        return $price = str_replace('đ', '', $price);
     }
 
     /**
@@ -174,7 +178,7 @@ class ExcelController extends Controller
             }
         }
 
-        return $price;
+        return $price = str_replace('₫', '', $price);
     }
 
     /**
@@ -185,13 +189,14 @@ class ExcelController extends Controller
 
     public function getPricePV($html)
     {
+        // dd($html);
         $price = 0;
         foreach ($html->find('div.css-1q5zfcu') as $e) {
             $price = $e->find('div.css-casirz');
-            $price = $price->innertext;
+            $price = $price->text();
         }
 
-        return $price;
+        return $price = str_replace('₫', '', $price);
     }
 
     /**
@@ -209,7 +214,7 @@ class ExcelController extends Controller
             $price = $price->innertext;
         }
 
-        return $price;
+        return $price = str_replace('Liên hệ', '0', $price);
     }
 
     /**
@@ -260,6 +265,21 @@ class ExcelController extends Controller
             $price = $price->innertext;
         }
 
+        return $price = str_replace('â«', '0', $price);
+    }
+
+    public function getPriceTHNS($url)
+    {
+        $price = 0;
+        $httpClient = new \Goutte\Client();
+
+        $crawler = $httpClient->request('GET', $url);
+        // dd($url);
+        $crawler->filter('.entry-summary .woocommerce-Price-amount')->each(function ($node) {
+            $price = str_replace("₫", "", $node->text());
+            $price = str_replace(",", "", $price);
+        });
+
         return $price;
     }
 
@@ -276,6 +296,6 @@ class ExcelController extends Controller
             $price = $e->innertext;
         }
 
-        return $price;
+        return $price = str_replace('₫', '', $price);
     }
 }

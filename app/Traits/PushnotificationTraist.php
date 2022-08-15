@@ -6,10 +6,8 @@ use App\Services\ExcelService;
 
 trait PushNotificationTrait
 {
-    public function pushMessage()
+    public function addLineHandle($line = 0)
     {
-        $pushNotificationService = new ExcelService();
-
-        return $pushNotificationService;
+        return $line += 3;
     }
 }

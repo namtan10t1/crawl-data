@@ -23,4 +23,5 @@ Route::get('/excel-test', [ExcelController::class, 'getData']);
 
 // Route::get('/store-queue', [ExcelController::class, 'storeQueue']);
 Route::get('/store-queue', [ExcelTempClass::class, 'totalAdd']);
+Route::get('/prices', [ExcelTempClass::class, 'getPricePV']);
 
